@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import io
+import base64
 from PIL import Image
 
 # إعدادات الصفحة الفخمة
@@ -15,7 +16,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown('<p class="main-title">🚀 منصة لؤي تيك للتصميم الإعلاني المحترف</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">إصدار V4.0 - صمم بوسترات منتجاتك الحقيقية أو النصية بأعلى سرعة وجودة</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">إصدار V5.0 - صمم بوسترات منتجاتك الحقيقية أو النصية بأعلى سرعة وجودة</p>', unsafe_allow_html=True)
 
 # الـ API Key الخاص بك (Together AI)
 TOGETHER_API_KEY = st.secrets["TOGETHER_API_KEY"] if "TOGETHER_API_KEY" in st.secrets else "ضع_مفتاحك_هنا"
@@ -35,14 +36,39 @@ with tab1:
         "عصري نيون (Cyberpunk Neon)"
     ], key="tab1_style")
     
-    extra_details = st.text_input("إضافات تريد رؤيتها في الخلفية؟ (اختياري بالإنجليزية) 📝", placeholder="e.g., on a dark rock, water drops, smoke...")
+    extra_details = st.text_input("إضافات تريد رؤيتها في الخلفية؟ (بالإنجليزية) 📝", placeholder="e.g., on a dark rock, water drops, smoke...")
 
     if st.button("أطلق العنان واصنع البوستر بالصورة الحقيقية 🔥", key="btn_img"):
-        if uploaded_file is not None:
+        if uploaded_file is not None and extra_details:
             with st.spinner("جاري معالجة صورتك الحقيقية ودمجها مع الخلفية السحرية... ⏳"):
-                st.info("كود استقبال الصورة ممتاز! سنقوم بربط الـ API الخاص بالصور في الخطوة التالية بمجرد تأكيدك.")
-        else:
+                # 1. تحويل الصورة المرفوعة إلى صيغة Base64 ليفهمها السيرفر
+                img_bytes = uploaded_file.read()
+                base64_image = base64.b64encode(img_bytes).decode('utf-8')
+                
+                # 2. تجهيز الطلب لمحرك معالجة الصور المطور (أقوى نموذج للصورة إلى صورة)
+                headers = {"Authorization": f"Bearer {TOGETHER_API_KEY}"}
+                payload = {
+                    "model": "black-forest-labs/FLUX.1-Depth",
+                    "prompt": f"A commercial advertisement product photography of the product in the image, {product_style}, {extra_details}, highly professional, 8k resolution, studio lighting, award winning product design",
+                    "image": f"data:image/jpeg;base64,{base64_image}",
+                    "steps": 20,
+                    "response_format": "base64"
+                }
+                
+                try:
+                    res = requests.post("https://api.together.xyz/v1/images/generations", json=payload, headers=headers)
+                    if res.status_code == 200:
+                        img_data = res.json()["data"][0]["b64_json"]
+                        final_image = Image.open(io.BytesIO(base64.b64decode(img_data)))
+                        st.image(final_image, caption="✨ تم دمج وإخراج البوستر الاحترافي بنجاح", use_container_width=True)
+                    else:
+                        st.error(f"حدث خطأ في السيرفر أثناء المعالجة: {res.text}")
+                except Exception as e:
+                    st.error(f"فشل الاتصال بالسيرفر: {str(e)}")
+        elif uploaded_file is None:
             st.warning("الرجاء رفع صورة المنتج أولاً يا هندسة! ⚠️")
+        elif not extra_details:
+            st.warning("الرجاء كتابة إضافات للخلفية في الخانة المخصصة (بالإنجليزية) لتوجيه الذكاء الاصطناعي! ⚠️")
 
 # ----------------- القسم الثاني: التصميم النصي القديم -----------------
 with tab2:
@@ -56,8 +82,6 @@ with tab2:
         "بسيط وراقي (Minimalist)"
     ], key="tab2_style")
     
-    aspect_ratio = st.selectbox("أبعاد البوستر الإعلاني 📐", ["مربع (Instagram Post) 1:1", "طولي (Story / Reels) 9:16"])
-
     if st.button("أطلق العنان واصنع التصميم النصي الآن 🔥", key="btn_text"):
         if text_prompt:
             with st.spinner("جاري تخيل وتوليد بوسترك الأسطوري... ⏳"):
@@ -70,7 +94,6 @@ with tab2:
                 try:
                     res = requests.post("https://api.together.xyz/v1/images/generations", json=payload, headers=headers)
                     if res.status_code == 200:
-                        import base64
                         img_data = res.json()["data"][0]["b64_json"]
                         image = Image.open(io.BytesIO(base64.b64decode(img_data)))
                         st.image(image, caption="✨ تم التصميم بنجاح بواسطة منصة لؤي تيك", use_container_width=True)
