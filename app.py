@@ -20,7 +20,8 @@ st.markdown('<p class="main-title">🚀 Loai Tech AI Design Platform</p>', unsaf
 st.markdown('<p class="sub-title">Version 5.3 - Generate High-End Product Advertisements Instantly</p>', unsafe_allow_html=True)
 
 # Fetch API Key from Secrets Safely
-TOGETHER_API_KEY = st.secrets["TOGETHER_API_KEY"] if "TOGETHER_API_KEY" in st.secrets else "YOUR_KEY_HERE"
+TOGETHER_API_KEY = ey_CbAnhR1GeN9tPJjpzGBZe	••••••••••••0826	
+
 
 # Clean English Navigation Tabs to Prevent Latin-1 Encoding Errors
 tab1, tab2 = st.tabs(["📸 Design via Product Image", "✍️ Design via Text Description"])
