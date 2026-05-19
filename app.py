@@ -19,8 +19,8 @@ st.markdown("""
 st.markdown('<p class="main-title">🚀 Loai Tech AI Design Platform</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Version 5.5 - Generate High-End Product Advertisements Instantly</p>', unsafe_allow_html=True)
 
-# مفتاح الـ API الصحيح والمفعل الخاص بك
-TOGETHER_API_KEY = "key_CbAnhR1GeN9tPjjpzGBZe0826"
+# مفتاح الـ API الصحيح والطويل الخاص بك تم دمجه هنا بالكامل للتشغيل الفوري
+TOGETHER_API_KEY = "839352e8250bd6850c90c74b9f2913f044efcb4c16f059e1bfd0fa910d610826"
 
 # الواجهة باللغة الإنجليزية بالكامل لتفادي مشاكل ترميز النصوص
 tab1, tab2 = st.tabs(["📸 Design via Product Image", "✍️ Design via Text Description"])
@@ -80,7 +80,7 @@ with tab2:
     st.write("### ✍️ Type Product Description to Generate from Scratch")
     text_prompt = st.text_input("Product Name & Description (In English Only) 🛍️", placeholder="e.g., Luxury Rolex watch on a golden stand")
     
-    text_style = st.selectbox("Design Creative Style 🎨", [
+    text_style = st.selectbox("Design Creative Style 22", [
         "Cinematic Luxury Commercial Photography",
         "3D Commercial Render Studio Profile",
         "Photorealistic Hyper-detailed Shot",
