@@ -36,7 +36,7 @@ with tab1:
         "عصري نيون"
     ], key="tab1_style")
     
-    # تحويل النمط المختار إلى إنجليزي لسلامة الـ API
+    # خريطة ترجمة تمنع إرسال أي حرف عربي للسيرفر لحل مشكلة الـ Encoding تماماً
     style_mapping = {
         "سينمائي فخم": "Cinematic Luxury style",
         "طبيعي هادئ": "Natural and Organic style with leaves and water drops",
@@ -51,7 +51,7 @@ with tab1:
         if uploaded_file is not None and extra_details:
             with st.spinner("جاري معالجة صورتك الحقيقية ودمجها مع الخلفية السحرية... ⏳"):
                 try:
-                    # قراءة بايتات الصورة بدون الاعتماد على الاسم لمنع أخطاء الـ Encoding
+                    # قراءة محتوى الصورة كـ Bytes مباشرة لتفادي مشاكل اسم الملف
                     img_bytes = uploaded_file.getvalue()
                     base64_image = base64.b64encode(img_bytes).decode('utf-8')
                     
