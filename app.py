@@ -5,10 +5,10 @@ import base64
 import json
 from PIL import Image
 
-# إعدادات الصفحة الفخمة
-st.set_page_config(page_title="منصة لؤي تيك للتصميم الإعلاني", page_icon="🚀", layout="centered")
+# Luxury Page Config
+st.set_page_config(page_title="Loai Tech Ad Platform", page_icon="🚀", layout="centered")
 
-# التصميم والمظهر (CSS) لجعله يبدو احترافياً
+# Custom Professional CSS Styles
 st.markdown("""
     <style>
     .main-title { font-family: 'Cairo', sans-serif; text-align: center; color: #1E3A8A; font-size: 36px; font-weight: bold; }
@@ -16,41 +16,34 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<p class="main-title">🚀 منصة لؤي تيك للتصميم الإعلاني المحترف</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">إصدار V5.2 - صمم بوسترات منتجاتك الحقيقية أو النصية بأعلى سرعة وجودة</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-title">🚀 Loai Tech AI Design Platform</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">Version 5.3 - Generate High-End Product Advertisements Instantly</p>', unsafe_allow_html=True)
 
-# الـ API Key الخاص بك (Together AI)
-TOGETHER_API_KEY = st.secrets["TOGETHER_API_KEY"] if "TOGETHER_API_KEY" in st.secrets else "ضع_مفتاحك_هنا"
+# Fetch API Key from Secrets Safely
+TOGETHER_API_KEY = st.secrets["TOGETHER_API_KEY"] if "TOGETHER_API_KEY" in st.secrets else "YOUR_KEY_HERE"
 
-# تقسيم الصفحة إلى خيارات نصوصها إنجليزية لتجنب أخطاء السيرفر تماماً
-tab1, tab2 = st.tabs(["Design with Product Image", "Design with Text Prompt"])
+# Clean English Navigation Tabs to Prevent Latin-1 Encoding Errors
+tab1, tab2 = st.tabs(["📸 Design via Product Image", "✍️ Design via Text Description"])
 
-# ----------------- القسم الأول: تصميم بصورة منتج حقيقي -----------------
+# ----------------- SECTION 1: IMAGE TO IMAGE DESIGN -----------------
 with tab1:
-    st.write("### 🖼️ ارفع صورة منتجك ودع الذكاء الاصطناعي يبدع خلفه!")
-    uploaded_file = st.file_uploader("اختر صورة المنتج (ساعة، عطر، حقيبة...)", type=["png", "jpg", "jpeg"])
+    st.write("### 🖼️ Upload Product Image & Generate Background")
+    uploaded_file = st.file_uploader("Choose a clean product image (PNG/JPG)", type=["png", "jpg", "jpeg"])
     
-    product_style_ar = st.selectbox("نمط الخلفية الإعلانية 🎨", [
-        "سينمائي فخم",
-        "طبيعي هادئ",
-        "استوديو احترافي",
-        "عصري نيون"
+    product_style = st.selectbox("Select Advertisement Background Theme 🎨", [
+        "Cinematic Luxury style, premium studio lighting",
+        "Natural and Organic style with soft shadows, leaves and water drops",
+        "Professional dark minimalist product display showcase podium",
+        "Cyberpunk Neon modern tech background with abstract lasers"
     ], key="tab1_style")
     
-    style_mapping = {
-        "سينمائي فخم": "Cinematic Luxury style",
-        "طبيعي هادئ": "Natural and Organic style with leaves and water drops",
-        "استوديو احترافي": "Professional Studio Light background",
-        "عصري نيون": "Cyberpunk Neon modern background"
-    }
-    product_style = style_mapping[product_style_ar]
-    
-    extra_details = st.text_input("إضافات تريد رؤيتها في الخلفية؟ (بالإنجليزية) 📝", placeholder="e.g., on a dark rock, water drops, smoke...")
+    extra_details = st.text_input("Enter Background Details (In English Only) 📝", placeholder="e.g., on a dark rock, floating water splashing, smoke atmosphere...")
 
-    if st.button("أطلق العنان واصنع البوستر بالصورة الحقيقية 🔥", key="btn_img"):
+    if st.button("Generate Image Poster Now 🔥", key="btn_img"):
         if uploaded_file is not None and extra_details:
-            with st.spinner("جاري معالجة صورتك الحقيقية ودمجها مع الخلفية السحرية... ⏳"):
+            with st.spinner("Processing your product image and crafting the layout... ⏳"):
                 try:
+                    # Reading raw image bytes to avoid any file name encoding issues
                     img_bytes = uploaded_file.getvalue()
                     base64_image = base64.b64encode(img_bytes).decode('utf-8')
                     
@@ -61,44 +54,44 @@ with tab1:
                     
                     payload = {
                         "model": "black-forest-labs/FLUX.1-Depth",
-                        "prompt": f"A commercial advertisement product photography of the product in the image, {product_style}, {extra_details}, highly professional, 8k resolution, studio lighting, award winning product design",
+                        "prompt": f"A high-end commercial advertisement product photography, {product_style}, {extra_details}, highly professional, 8k resolution, award winning studio composition",
                         "image": f"data:image/jpeg;base64,{base64_image}",
                         "steps": 20,
                         "response_format": "base64"
                     }
                     
-                    # إرسال البيانات بترميز UTF-8 الصارم لمنع خطأ latin-1 للأبد
+                    # Hardcoded UTF-8 Enforcement for API Request Payload
                     data_json = json.dumps(payload, ensure_ascii=False).encode('utf-8')
                     res = requests.post("https://api.together.xyz/v1/images/generations", data=data_json, headers=headers)
                     
                     if res.status_code == 200:
                         img_data = res.json()["data"][0]["b64_json"]
                         final_image = Image.open(io.BytesIO(base64.b64decode(img_data)))
-                        st.image(final_image, caption="✨ تم دمج وإخراج البوستر الاحترافي بنجاح", use_container_width=True)
+                        st.image(final_image, caption="✨ Poster Designed Successfully by Loai Tech", use_container_width=True)
                     else:
-                        st.error(f"حدث خطأ في السيرفر أثناء المعالجة: {res.text}")
+                        st.error(f"Server Processing Error: {res.text}")
                 except Exception as e:
-                    st.error(f"فشل الاتصال بالسيرفر: {str(e)}")
+                    st.error(f"Connection Failed: {str(e)}")
         elif uploaded_file is None:
-            st.warning("الرجاء رفع صورة المنتج أولاً يا هندسة! ⚠️")
+            st.warning("Please upload a product image first! ⚠️")
         elif not extra_details:
-            st.warning("الرجاء كتابة إضافات للخلفية في الخانة المخصصة (بالإنجليزية) لتوجيه الذكاء الاصطناعي! ⚠️")
+            st.warning("Please type extra details in English to guide the AI! ⚠️")
 
-# ----------------- القسم الثاني: التصميم النصي القديم -----------------
+# ----------------- SECTION 2: TEXT TO IMAGE DESIGN -----------------
 with tab2:
-    st.write("### ✍️ اكتب وصف المنتج والذكاء الاصطناعي سيتخيله كاملاً")
-    text_prompt = st.text_input("اسم المنتج أو وصفه الفخم (بالإنجليزية) 🛍️", placeholder="e.g., Luxury Rolex watch on a golden stand")
+    st.write("### ✍️ Type Product Description to Generate from Scratch")
+    text_prompt = st.text_input("Product Name & Description (In English Only) 🛍️", placeholder="e.g., Luxury Rolex watch on a golden stand")
     
-    text_style = st.selectbox("نمط التصميم الإعلاني 🎨", [
-        "سينمائي فخم (Cinematic)",
-        "إعلان تجاري ثلاثي الأبعاد (3D Commercial)",
-        "واقعي جداً (Photorealistic)",
-        "بسيط وراقي (Minimalist)"
+    text_style = st.selectbox("Design Creative Style 🎨", [
+        "Cinematic Luxury Commercial Photography",
+        "3D Commercial Render Studio Profile",
+        "Photorealistic Hyper-detailed Shot",
+        "Minimalist Elegant Design Layout"
     ], key="tab2_style")
     
-    if st.button("أطلق العنان واصنع التصميم النصي الآن 🔥", key="btn_text"):
+    if st.button("Generate Text Poster Now 🔥", key="btn_text"):
         if text_prompt:
-            with st.spinner("جاري تخيل وتوليد بوسترك الأسطوري... ⏳"):
+            with st.spinner("Visualizing your imagination... ⏳"):
                 try:
                     headers = {
                         "Authorization": f"Bearer {TOGETHER_API_KEY}",
@@ -106,7 +99,7 @@ with tab2:
                     }
                     payload = {
                         "model": "black-forest-labs/FLUX.1-schnell",
-                        "prompt": f"{text_prompt}, {text_style} commercial advertisement product photography, high resolution, 8k",
+                        "prompt": f"{text_prompt}, {text_style}, high resolution, commercial product advertisement photography, 8k",
                         "width": 1024, "height": 1024, "steps": 4, "response_format": "base64"
                     }
                     
@@ -116,10 +109,10 @@ with tab2:
                     if res.status_code == 200:
                         img_data = res.json()["data"][0]["b64_json"]
                         image = Image.open(io.BytesIO(base64.b64decode(img_data)))
-                        st.image(image, caption="✨ تم التصميم بنجاح بواسطة منصة لؤي تيك", use_container_width=True)
+                        st.image(image, caption="✨ Poster Designed Successfully by Loai Tech", use_container_width=True)
                     else:
-                        st.error(f"حدث خطأ في السيرفر: {res.text}")
+                        st.error(f"Server Error: {res.text}")
                 except Exception as e:
-                    st.error(f"فشل الاتصال: {str(e)}")
+                    st.error(f"Connection Error: {str(e)}")
         else:
-            st.warning("الرجاء كتابة وصف المنتج أولاً! ⚠️")
+            st.warning("Please enter a product description first! ⚠️")
