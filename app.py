@@ -19,10 +19,10 @@ st.markdown("""
 st.markdown('<p class="main-title">🚀 Loai Tech AI Design Platform</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Version 5.5 - Generate High-End Product Advertisements Instantly</p>', unsafe_allow_html=True)
 
-# مفتاح الـ API الصحيح الخاص بك مدمج هنا للتشغيل الفوري
+# مفتاح الـ API الصحيح والمفعل الخاص بك
 TOGETHER_API_KEY = "key_CbAnhR1GeN9tPjjpzGBZe0826"
 
-# الواجهة باللغة الإنجليزية لتجنب أخطاء الترميز (Latin-1)
+# الواجهة باللغة الإنجليزية بالكامل لتفادي مشاكل ترميز النصوص
 tab1, tab2 = st.tabs(["📸 Design via Product Image", "✍️ Design via Text Description"])
 
 # ----------------- SECTION 1: IMAGE TO IMAGE DESIGN -----------------
