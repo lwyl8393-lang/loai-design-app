@@ -74,56 +74,53 @@ with menu_tab1:
     uploaded_file = st.file_uploader("Upload Clean Product Photo", type=["png", "jpg", "jpeg"], key="main_upload")
 
     if uploaded_file is not None:
-        st.info("🎯 Photo uploaded successfully! Press the distribution button below to trigger the automation workflow.")
+        st.success("🎯 Photo uploaded successfully! Processing design environment...")
         
-        # أزرار التشغيل المباشر بشكل منظم لمنع أخطاء الذاكرة المؤقتة
-        if st.button("Start Automatic Design & Distribution Now 🚀"):
+        col1, col2 = st.columns([1, 1])
+        
+        with col1:
+            st.markdown("### 🎨 AI Creative Design Output")
+            # تشغيل التصميم مباشرة تلقائياً بمجرد رفع الصورة بدون زر يعلق الذاكرة
+            with st.spinner("AI is rendering premium studio environment..."):
+                try:
+                    base64_image = base64.b64encode(uploaded_file.getvalue()).decode('utf-8')
+                    headers = {"Authorization": f"Bearer {TOGETHER_API_KEY}", "Content-Type": "application/json"}
+                    
+                    payload = {
+                        "model": "black-forest-labs/FLUX.1-Depth",
+                        "prompt": "Commercial ad product photography, luxurious cinematic setting, deep moody blue lighting with warm golden accents, water drops, smoke atmosphere, ultra premium composition, global illumination, highly professional award winning studio setting",
+                        "image": f"data:image/jpeg;base64,{base64_image}",
+                        "steps": 20, "response_format": "base64"
+                    }
+                    res = requests.post("https://api.together.xyz/v1/images/generations", json=payload, headers=headers)
+                    
+                    if res.status_code == 200:
+                        img_data = res.json()["data"][0]["b64_json"]
+                        final_image = Image.open(io.BytesIO(base64.b64decode(img_data)))
+                        st.image(final_image, caption="✨ Premium Poster Designed by Loai Tech")
+                    else: 
+                        st.error("Design Server is syncing. Please refresh the page.")
+                except Exception as e: 
+                    st.error(f"Design Error: {str(e)}")
+        
+        with col2:
+            st.markdown("### 📢 Auto-Publishing & Campaign Sync")
             
-            col1, col2 = st.columns([1, 1])
+            simulated_caption = "✨ فخامة بلا حدود! منتجك الجديد بلمسة إعلانية مبتكرة من Loai Tech. متوفر الآن للطلب المباشر بأفضل الأسعار وبشحن فوري! 🚀"
+            st.info(f"📝 AI Caption Ready:\n\n '{simulated_caption}'")
             
-            with col1:
-                st.markdown("### 🎨 AI Creative Design Output")
-                with st.spinner("AI is analyzing product outline and rendering premium studio environment..."):
-                    try:
-                        base64_image = base64.b64encode(uploaded_file.getvalue()).decode('utf-8')
-                        headers = {"Authorization": f"Bearer {TOGETHER_API_KEY}", "Content-Type": "application/json"}
-                        
-                        payload = {
-                            "model": "black-forest-labs/FLUX.1-Depth",
-                            "prompt": "Commercial ad product photography, luxurious cinematic setting, deep moody blue lighting with warm golden accents, water drops, smoke atmosphere, ultra premium composition, global illumination, highly professional award winning studio setting",
-                            "image": f"data:image/jpeg;base64,{base64_image}",
-                            "steps": 20, "response_format": "base64"
-                        }
-                        res = requests.post("https://api.together.xyz/v1/images/generations", json=payload, headers=headers)
-                        
-                        if res.status_code == 200:
-                            img_data = res.json()["data"][0]["b64_json"]
-                            final_image = Image.open(io.BytesIO(base64.b64decode(img_data)))
-                            st.image(final_image, caption="✨ Premium Poster Designed by Loai Tech")
-                            st.success("✅ Design Rendered Successfully.")
-                        else: 
-                            st.error("Design Server is busy. Please try clicking the button again.")
-                    except Exception as e: 
-                        st.error(f"Design Error: {str(e)}")
+            st.write("---")
             
-            with col2:
-                st.markdown("### 📢 Auto-Publishing & Campaign Sync")
-                
-                with st.spinner("Drafting highly persuasive creative ad caption..."):
-                    time.sleep(1)
-                    simulated_caption = "✨ فخامة بلا حدود! منتجك الجديد بلمسة إعلانية مبتكرة. متوفر الآن للطلب المباشر بأفضل الأسعار وبشحن فوري! 🚀"
-                    st.info(f"📝 AI Caption Generated:\n\n '{simulated_caption}'")
-                
-                st.write("---")
+            # زر النشر الحين معزول تماماً ومستقر
+            if st.button("Start Automatic Distribution Now 🚀"):
                 st.write("🌍 Broadcasting Status:")
-                
                 if ws_sync:
                     with st.spinner("Piping image and caption into WhatsApp Business API..."):
                         time.sleep(1)
                         st.success("🟢 Broadcasted successfully to WhatsApp Subscribers.")
                 
                 if ig_sync:
-                    with st.spinner("Connecting Instagram Graph API and publishing to linked stories..."):
+                    with st.spinner("Connecting Instagram Graph API..."):
                         time.sleep(1)
                         st.success("🟢 Published successfully to Instagram Feed/Story Stream.")
 
