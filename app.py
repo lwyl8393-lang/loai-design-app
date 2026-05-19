@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import io
 import base64
+import json
 from PIL import Image
 
 # إعدادات الصفحة الفخمة
@@ -16,13 +17,13 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown('<p class="main-title">🚀 منصة لؤي تيك للتصميم الإعلاني المحترف</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">إصدار V5.1 - صمم بوسترات منتجاتك الحقيقية أو النصية بأعلى سرعة وجودة</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">إصدار V5.2 - صمم بوسترات منتجاتك الحقيقية أو النصية بأعلى سرعة وجودة</p>', unsafe_allow_html=True)
 
 # الـ API Key الخاص بك (Together AI)
 TOGETHER_API_KEY = st.secrets["TOGETHER_API_KEY"] if "TOGETHER_API_KEY" in st.secrets else "ضع_مفتاحك_هنا"
 
-# تقسيم الصفحة إلى خيارات
-tab1, tab2 = st.tabs(["📸 تصميم بصورة منتج حقيقي", "✍️ تصميم بوصف نصي فقط"])
+# تقسيم الصفحة إلى خيارات نصوصها إنجليزية لتجنب أخطاء السيرفر تماماً
+tab1, tab2 = st.tabs(["Design with Product Image", "Design with Text Prompt"])
 
 # ----------------- القسم الأول: تصميم بصورة منتج حقيقي -----------------
 with tab1:
@@ -36,7 +37,6 @@ with tab1:
         "عصري نيون"
     ], key="tab1_style")
     
-    # خريطة ترجمة تمنع إرسال أي حرف عربي للسيرفر لحل مشكلة الـ Encoding تماماً
     style_mapping = {
         "سينمائي فخم": "Cinematic Luxury style",
         "طبيعي هادئ": "Natural and Organic style with leaves and water drops",
@@ -51,11 +51,14 @@ with tab1:
         if uploaded_file is not None and extra_details:
             with st.spinner("جاري معالجة صورتك الحقيقية ودمجها مع الخلفية السحرية... ⏳"):
                 try:
-                    # قراءة محتوى الصورة كـ Bytes مباشرة لتفادي مشاكل اسم الملف
                     img_bytes = uploaded_file.getvalue()
                     base64_image = base64.b64encode(img_bytes).decode('utf-8')
                     
-                    headers = {"Authorization": f"Bearer {TOGETHER_API_KEY}"}
+                    headers = {
+                        "Authorization": f"Bearer {TOGETHER_API_KEY}",
+                        "Content-Type": "application/json; charset=utf-8"
+                    }
+                    
                     payload = {
                         "model": "black-forest-labs/FLUX.1-Depth",
                         "prompt": f"A commercial advertisement product photography of the product in the image, {product_style}, {extra_details}, highly professional, 8k resolution, studio lighting, award winning product design",
@@ -64,7 +67,10 @@ with tab1:
                         "response_format": "base64"
                     }
                     
-                    res = requests.post("https://api.together.xyz/v1/images/generations", json=payload, headers=headers)
+                    # إرسال البيانات بترميز UTF-8 الصارم لمنع خطأ latin-1 للأبد
+                    data_json = json.dumps(payload, ensure_ascii=False).encode('utf-8')
+                    res = requests.post("https://api.together.xyz/v1/images/generations", data=data_json, headers=headers)
+                    
                     if res.status_code == 200:
                         img_data = res.json()["data"][0]["b64_json"]
                         final_image = Image.open(io.BytesIO(base64.b64decode(img_data)))
@@ -93,14 +99,20 @@ with tab2:
     if st.button("أطلق العنان واصنع التصميم النصي الآن 🔥", key="btn_text"):
         if text_prompt:
             with st.spinner("جاري تخيل وتوليد بوسترك الأسطوري... ⏳"):
-                headers = {"Authorization": f"Bearer {TOGETHER_API_KEY}"}
-                payload = {
-                    "model": "black-forest-labs/FLUX.1-schnell",
-                    "prompt": f"{text_prompt}, {text_style} commercial advertisement product photography, high resolution, 8k",
-                    "width": 1024, "height": 1024, "steps": 4, "response_format": "base64"
-                }
                 try:
-                    res = requests.post("https://api.together.xyz/v1/images/generations", json=payload, headers=headers)
+                    headers = {
+                        "Authorization": f"Bearer {TOGETHER_API_KEY}",
+                        "Content-Type": "application/json; charset=utf-8"
+                    }
+                    payload = {
+                        "model": "black-forest-labs/FLUX.1-schnell",
+                        "prompt": f"{text_prompt}, {text_style} commercial advertisement product photography, high resolution, 8k",
+                        "width": 1024, "height": 1024, "steps": 4, "response_format": "base64"
+                    }
+                    
+                    data_json = json.dumps(payload, ensure_ascii=False).encode('utf-8')
+                    res = requests.post("https://api.together.xyz/v1/images/generations", data=data_json, headers=headers)
+                    
                     if res.status_code == 200:
                         img_data = res.json()["data"][0]["b64_json"]
                         image = Image.open(io.BytesIO(base64.b64decode(img_data)))
