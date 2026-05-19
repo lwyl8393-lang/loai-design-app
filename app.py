@@ -12,7 +12,7 @@ st.markdown("""
     .main-title { font-family: 'Cairo', sans-serif; text-align: center; color: #1E3A8A; font-size: 36px; font-weight: bold; }
     .sub-title { font-family: 'Cairo', sans-serif; text-align: center; color: #4B5563; font-size: 18px; margin-bottom: 30px; }
     </style>
-""", unsafe_allow_index=True)
+""", unsafe_allow_html=True)
 
 st.markdown('<p class="main-title">🚀 منصة لؤي تيك للتصميم الإعلاني المحترف</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">إصدار V4.0 - صمم بوسترات منتجاتك الحقيقية أو النصية بأعلى سرعة وجودة</p>', unsafe_allow_html=True)
@@ -40,7 +40,6 @@ with tab1:
     if st.button("أطلق العنان واصنع البوستر بالصورة الحقيقية 🔥", key="btn_img"):
         if uploaded_file is not None:
             with st.spinner("جاري معالجة صورتك الحقيقية ودمجها مع الخلفية السحرية... ⏳"):
-                # هنا سيتم دمج الصورة لاحقاً بالـ API الجديد
                 st.info("كود استقبال الصورة ممتاز! سنقوم بربط الـ API الخاص بالصور في الخطوة التالية بمجرد تأكيدك.")
         else:
             st.warning("الرجاء رفع صورة المنتج أولاً يا هندسة! ⚠️")
@@ -62,7 +61,6 @@ with tab2:
     if st.button("أطلق العنان واصنع التصميم النصي الآن 🔥", key="btn_text"):
         if text_prompt:
             with st.spinner("جاري تخيل وتوليد بوسترك الأسطوري... ⏳"):
-                # الكود النصي القديم المستقر الخاص بـ Together AI
                 headers = {"Authorization": f"Bearer {TOGETHER_API_KEY}"}
                 payload = {
                     "model": "black-forest-labs/FLUX.1-schnell",
