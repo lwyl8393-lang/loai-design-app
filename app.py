@@ -17,13 +17,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown('<p class="main-title">🚀 Loai Tech AI Design Platform</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">Version 5.3 - Generate High-End Product Advertisements Instantly</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">Version 5.5 - Generate High-End Product Advertisements Instantly</p>', unsafe_allow_html=True)
 
-# Fetch API Key from Secrets Safely
+# مفتاح الـ API مدمج هنا مباشرة للتشغيل الفوري
 TOGETHER_API_KEY = "key_CbAnhR1GeN9tPjjpzGBZe0826"
 
-
-# Clean English Navigation Tabs to Prevent Latin-1 Encoding Errors
+# الواجهة باللغة الإنجليزية لتجنب أخطاء الترميز (Latin-1)
 tab1, tab2 = st.tabs(["📸 Design via Product Image", "✍️ Design via Text Description"])
 
 # ----------------- SECTION 1: IMAGE TO IMAGE DESIGN -----------------
@@ -44,7 +43,6 @@ with tab1:
         if uploaded_file is not None and extra_details:
             with st.spinner("Processing your product image and crafting the layout... ⏳"):
                 try:
-                    # Reading raw image bytes to avoid any file name encoding issues
                     img_bytes = uploaded_file.getvalue()
                     base64_image = base64.b64encode(img_bytes).decode('utf-8')
                     
@@ -61,7 +59,6 @@ with tab1:
                         "response_format": "base64"
                     }
                     
-                    # Hardcoded UTF-8 Enforcement for API Request Payload
                     data_json = json.dumps(payload, ensure_ascii=False).encode('utf-8')
                     res = requests.post("https://api.together.xyz/v1/images/generations", data=data_json, headers=headers)
                     
