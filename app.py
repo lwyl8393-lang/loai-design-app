@@ -20,7 +20,7 @@ st.markdown('<p class="main-title">🚀 Loai Tech AI Design Platform</p>', unsaf
 st.markdown('<p class="sub-title">Version 5.3 - Generate High-End Product Advertisements Instantly</p>', unsafe_allow_html=True)
 
 # Fetch API Key from Secrets Safely
-TOGETHER_API_KEY = key_CbAnhR1GeN9tPJjpzGBZe	••••••••••••0826	
+TOGETHER_API_KEY = "key_CbAnhR1GeN9tPjjpzGBZe0826"
 
 
 # Clean English Navigation Tabs to Prevent Latin-1 Encoding Errors
