@@ -19,7 +19,7 @@ st.markdown("""
 st.markdown('<p class="main-title">🚀 Loai Tech AI Design Platform</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Version 5.5 - Generate High-End Product Advertisements Instantly</p>', unsafe_allow_html=True)
 
-# مفتاح الـ API مدمج هنا مباشرة للتشغيل الفوري
+# مفتاح الـ API الصحيح الخاص بك مدمج هنا للتشغيل الفوري
 TOGETHER_API_KEY = "key_CbAnhR1GeN9tPjjpzGBZe0826"
 
 # الواجهة باللغة الإنجليزية لتجنب أخطاء الترميز (Latin-1)
