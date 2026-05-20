@@ -63,7 +63,7 @@ with tab_marketing:
     with col_control:
         product_type = st.selectbox("📦 نوع المنتج المرفوع", ["🎧 Premium Headphones", "🧴 Luxury Perfume", "⌚ Smart Watch", "👟 Designer Sneakers"])
         ad_tone = st.selectbox("✍️ لهجة الإعلان التسويقي", ["لهجة خليجية بيضاء", "لغة عربية فصحى حماسية", "English Modern Ad Copy"])
-       uploaded_file = st.file_uploader("Upload product image here", type=["png", "jpg", "jpeg"])
+        uploaded_file = st.file_uploader("Upload product image here", type=["png", "jpg", "jpeg"])
     with col_preview:
         if uploaded_file is not None:
             st.success("🎯 تم رفع وتجهيز صورة المنتج!")
@@ -101,7 +101,7 @@ with tab_pricing:
     
     if st.button("تحليل وتحديد سعر البيع المثالي 📊"):
         total_costs = cost_price + shipping_price + ads_price
-        suggested_sale = total_costs * 1.5  # هامش ربح 50%
+        suggested_sale = total_costs * 1.5  
         net_profit = suggested_sale - total_costs
         st.markdown(f"""
         <div class="feature-card" style="border-left-color: #10B981;">
@@ -141,7 +141,7 @@ with tab_seo:
             <div class="feature-card">
                 <h4>🎯 الوصف الجديد المحسن كلياً والمتوافق مع السيو (SEO):</h4>
                 <p><b>العنوان المقترح:</b> سماعة بلوتوث لاسلكية عازلة للضوضاء المحيطية - Loai Tech Pro</p>
-                <p><b>الوصف الجاذب:</b> استمتع بتجربة صوتية استثنائية ونقاء لا مثيل له مع أفضل سماعة بلوتوث لاسلكية تدعم خاصية عزل الضجيج النشط (ANC). تم تصميمها بهيكل مريح ليناسب الاستخدام الطويل أثناء العمل أو الرياضة مع بطارية خارقة ممتدة. اطلبها الآن من متجرنا بأفضل سعر وضمان ذهبي متكامل!</p>
+                <p><b>الوصف الجاذب:</b> استمتع بتجربة صوتية استثنائية ونقاء لا ميل له مع أفضل سماعة بلوتوث لاسلكية تدعم خاصية عزل الضجيج النشط (ANC). تم تصميمها بهيكل مريح ليناسب الاستخدام الطويل أثناء العمل أو الرياضة مع بطارية خارقة ممتدة. اطلبها الآن من متجرنا بأفضل سعر وضمان ذهبي متكامل!</p>
             </div>
             """, unsafe_allow_html=True)
 
@@ -158,6 +158,6 @@ with tab_video:
                 <h4>🎬 سكريبت تيك توك الاحترافي الجاهز لتصوير منتج: ({video_prod})</h4>
                 <p><b>• أول 3 ثواني (الخطاف لجذب الانتباه):</b> ابدأ الفيديو بلقطة سريعة للمنتج وهو يسقط في الماء مع صوت قوي، وقل بصوت مسموع: "وقف! لا تشتري أي ساعة ذكية قبل ما تشوف هذا الفيديو!"</p>
                 <p><b>• منتصف الفيديو (استعراض القيمة والحل):</b> استعرض شاشة الساعة وسرعة استجابتها للاشعارات والاتصالات والمميزات الرياضية بطريقة تصوير قريبة وعالية الجودة.</p>
-                <p><b>• آخر 3 ثواني (طلب الفعل - CTA):</b> "الساعة عليها عرض رهيب الحين وشحن مجاني ل أول 50 مشتري، اضغط على الرابط في البايو واطلبها الحين!"</p>
+                <p><b>• آخر 3 ثواني (طلب الفعل - CTA):</b> "الساعة عليها عرض رهيب الحين وشحن مجاني لأول 50 مشتري، اضغط على الرابط في البايو واطلبها الحين!"</p>
             </div>
             """, unsafe_allow_html=True)
