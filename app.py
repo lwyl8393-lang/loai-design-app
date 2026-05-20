@@ -9,7 +9,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# تطبيق الطابع البصري الفاخر للمنصة (لوحة تحكم سوداء مع إضاءة زرقاء خفيفة)
+# تطبيق الطابع البصري الفاخر للمنصة
 st.markdown("""
     <style>
     .main { background-color: #0F172A; color: #E2E8F0; }
@@ -30,7 +30,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# 2. القائمة الجانبية لإدارة ربط القنوات وتفعيل الصلاحيات للتاجر
+# 2. القائمة الجانبية لإدارة ربط القنوات وتفعيل الصلاحيات
 with st.sidebar:
     st.markdown("### 🌐 Channel Integration Control")
     st.write("Enable permissions for automatic publishing:")
@@ -60,8 +60,17 @@ menu_tab1, menu_tab2 = st.tabs([
 
 with menu_tab1:
     st.markdown("## 📸 One-Click Multi-Channel Distribution Hub")
-    st.write("Remove the guesswork. Just upload your product photo, and let Loai Tech system do everything else.")
+    st.write("Remove the guesswork. Just upload your product photo, select the type, and let Loai Tech do the magic.")
     st.markdown("---")
+    
+    # 📝 إتاحة خيار تحديد نوع المنتج لتغيير البوستر والنص بذكاء
+    product_type = st.selectbox(
+        "📦 Select Product Category (🎯 اختر تصنيف المنتج لملائمة الأبعاد والخلفية)",
+        ["🎧 Premium Headphones (سماعات رأس فاخرة)", 
+         "🧴 Luxury Perfume & Fragrance (عطور وبخور)", 
+         "⌚ Smart Watches & Accessories (ساعات ذكية)", 
+         "👟 Limited Edition Sneakers (أحذية ورياضة)"]
+    )
     
     # مربع رفع الملفات
     uploaded_file = st.file_uploader("Upload Clean Product Photo", type=["png", "jpg", "jpeg"], key="main_upload")
@@ -71,29 +80,33 @@ with menu_tab1:
         
         col1, col2 = st.columns([1, 1])
         
+        # تجهيز البيانات والمكتبة الذكية بناءً على اختيار المستخدم
+        if "Headphones" in product_type:
+            poster_url = "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600"
+            caption_text = "🎧 انغمس في عالم من الصوت النقي! سماعات لؤي تيك الاحترافية تعزل الضجيج وتمنحك بيئة صوتية سينمائية ساحرة مع بطارية تدوم طويلاً. اطلبها الآن وعش التجربة الفاخرة! 🚀"
+        elif "Perfume" in product_type:
+            poster_url = "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=600&q=80"
+            caption_text = "🧴 سحر يفوح بالفخامة! نأخذك في رحلة تأسر الحواس مع عطرنا الجديد المصمم عبر منصة Loai Tech ليواكب تطلعاتك الأنيقة. متاح للطلب الفوري بنسبة خصم حصرية! ✨"
+        elif "Watches" in product_type:
+            poster_url = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=600"
+            caption_text = "⌚ وقتك ثمين، اجعله أكثر ذكاءً! الساعة الذكية المتكاملة لمتابعة نشاطك اليومي بأناقة عصرية تناسب جميع المناسبات. متوفرة الآن مع شحن مجاني وسريع! 🌍"
+        else:
+            poster_url = "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600"
+            caption_text = "👟 انطلق بخطوات واثقة ومريحة! الحذاء الرياضي الحصري ذو التصميم الانسيابي المبتكر لتوفير أقصى درجات الراحة لقدميك أثناء الجري أو العمل. الكمية محدودة جداً! 🔥"
+
         with col1:
             st.markdown("### 🎨 AI Creative Design Output")
             with st.spinner("AI is rendering premium studio environment in real-time..."):
-                time.sleep(1.5) # محاكاة سريعة وذكية ومستقرة تماماً لإبهار العميل
-                
-                # استخدام الرابط المباشر الثابت للصورة الفخمة لضمان عدم حدوث أي خطأ سيرفر مستقبلاً
-                luxury_poster_url = "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=600&q=80"
-                st.image(luxury_poster_url, caption="✨ Premium Poster Designed by Loai Tech Studio")
+                time.sleep(1.2) # محاكاة معالجة سريعة مستقرة وآمنة
+                st.image(poster_url, caption=f"✨ Premium Poster Generated for {product_type}")
                 st.success("✅ Design Rendered Instantly.")
         
         with col2:
             st.markdown("### 📢 Auto-Publishing & Campaign Sync")
-            
-            # نص الإعلان المبتكر جداً اللي طلبته
-            simulated_caption = (
-                "✨ فخامة بلا حدود وتجربة تأسر الحواس!\n\n"
-                "نقدم لكم التصميم الإعلاني المبتكر لمنتجكم الفاخر عبر منصة Loai Tech الأوتوماتيكية بالكامل. "
-                "تمت صياغة هذا النص الإعلاني وتجهيزه للبث المباشر فوراً لجمهوركم المستهدف لزيادة المبيعات بنسبة 40%! 🚀"
-            )
-            st.info(f"📝 AI Creative Caption Ready:\n\n {simulated_caption}")
+            st.info(f"📝 AI Creative Caption Ready:\n\n {caption_text}")
             st.write("---")
             
-            # زر النشر الفوري المباشر والمستقر تماماً
+            # زر النشر الفوري المستقر
             if st.button("Start Automatic Distribution Now 🚀"):
                 st.write("🌍 Broadcasting Status:")
                 if ws_sync:
