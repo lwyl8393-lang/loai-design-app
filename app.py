@@ -63,7 +63,7 @@ with tab_marketing:
     with col_control:
         product_type = st.selectbox("📦 نوع المنتج المرفوع", ["🎧 Premium Headphones", "🧴 Luxury Perfume", "⌚ Smart Watch", "👟 Designer Sneakers"])
         ad_tone = st.selectbox("✍️ لهجة الإعلان التسويقي", ["لهجة خليجية بيضاء", "لغة عربية فصحى حماسية", "English Modern Ad Copy"])
-        uploaded_file = st.file_uploader("ارفع صورة المنتج هنا لتجهيزها"، type=["png", "jpg", "jpeg"])
+       uploaded_file = st.file_uploader("Upload product image here", type=["png", "jpg", "jpeg"])
     with col_preview:
         if uploaded_file is not None:
             st.success("🎯 تم رفع وتجهيز صورة المنتج!")
