@@ -138,9 +138,9 @@ with st.sidebar:
     st.metric(label="الحملات الآلية المنشورة بنجاح", value="1,248 حملة")
     st.metric(label="المبيعات المحققة لعملائنا عبر المنصة", value="$48,920")
 
-# 5. التبويبات العلوية (تم إضافة الماركتير الآلي كأول ميزة رئيسية)
+# 5. التبويبات العلوية (الماركتير الآلي هو الخيار الأول دائماً)
 tab_autopilot, tab_marketing, tab_calendar, tab_pricing, tab_review, tab_seo, tab_video = st.tabs([
-    "🤖 الماركتير الآلي (جديد)",
+    "🤖 الماركتير الآلي",
     "📸 التصميم والبث اليدوي", 
     "📅 صناعة خطة المحتوى", 
     "💰 مستشار التسعير المحترف", 
@@ -149,17 +149,18 @@ tab_autopilot, tab_marketing, tab_calendar, tab_pricing, tab_review, tab_seo, ta
     "🎬 سكريبتات الفيديوهات"
 ])
 
-# ----------------- 🆕 0. تبويب موظف التسويق الافتراضي (Autopilot) -----------------
+# ----------------- 🤖 0. تبويب موظف التسويق الافتراضي (التفاعلي الحقيقي) -----------------
 with tab_autopilot:
     st.markdown("<h3 style='color:#34D399;'>🤖 الماركتير الآلي - موظف التسويق الافتراضي المستقل</h3>", unsafe_allow_html=True)
-    st.write("هنا تكمن قوة رِكاز الجبارة! ارفع صور منتجاتك كاملة، حدد وتيرة النشر، واترك النظام يسوّق ويبث أوتوماتيكياً بدون أي تدخل منك.")
+    st.write("ارفع صور منتجاتك كاملة، حدد وتيرة النشر، واترك النظام يسوّق ويبث أوتوماتيكياً بدون أي تدخل منك.")
     
     col_upload, col_status = st.columns([1, 1])
     
     with col_upload:
         st.markdown('<div class="service-card">', unsafe_allow_html=True)
         st.markdown("#### 📂 مستودع صور المنتجات السحابي")
-        # السماح برفع عدة صور معاً لتخزينها
+        
+        # استقبال صور إكسسوارات الجوال الحقيقية من المستخدم هنا
         bulk_files = st.file_uploader("ارفع صور جميع منتجات متجرك دفعة واحدة (يمكنك تحديد عدة صور):", type=["png", "jpg", "jpeg"], accept_multiple_files=True)
         
         post_frequency = st.select_slider(
@@ -188,14 +189,14 @@ with tab_autopilot:
                 </div>
                 """, unsafe_allow_html=True)
                 
-                # محاكاة المنشور القادم
-                st.info(f"⏳ المنشور القادم المجدول تلقائياً: سيتم بثه بعد قليل بناءً على وتيرة ({post_frequency}).")
-                
-                # إظهار عينة للمنشور الذي يعالجه الموظف الآلي حالياً في الخلفية
+                st.info(f"⏳ المنشور القادم المجدول تلقائياً: سيتم بثه بناءً على وتيرة ({post_frequency}).")
                 st.markdown("---")
                 st.markdown("👁️ **معاينة المنشور الحالي قيد البث الأوتوماتيكي:**")
-                st.image("https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=600&q=80", caption="المنتج النشط في طابور النشر الحالي", width=250)
-                st.code("نص المنشور التلقائي المولد: 'تألقوا بأفضل المنتجات الحصرية لليوم بخصم تلقائي 15% متاح فقط لـ 3 ساعات! الرابط في البايو 🚀'", language="text")
+                
+                # ✨ التحديث السحري: هنا نقوم بعرض أول صورة رفعها التاجر بنفسه (إكسسوارات الجوال) بدلاً من صورة العطر الثابتة!
+                st.image(bulk_files[0], caption="المنتج النشط المستخرج من ملفاتك المرفوعة", width=300)
+                
+                st.code("نص المنشور التلقائي المولد: 'تألقوا بأفضل الإكسسوارات الحصرية لليوم بخصم تلقائي 15% متاح لفترة محدودة! الرابط في البايو 🚀'", language="text")
             else:
                 st.warning("💤 الموظف الافتراضي في وضع الاستعداد. قم بتفعيل الخيار بالأعلى ليبدأ العمل تلقائياً!")
         else:
@@ -221,8 +222,14 @@ with tab_marketing:
         elif "فصحى" in ad_tone: generated_caption = f"✨ ارتقِ بأسلوب حياتك اليومي مع {prod_title}. هندسة متقنة وتصميم ساحر يلبي طموحاتك. متوفر الآن بخصم خاص لفترة محدودة، اضغط على الرابط واكتشف الفرق الأصيل."
         else: generated_caption = f"⚡ التريند الجديد وصل! {prod_title} اللي الكل يتكلم عنه متوفر الحين بمتجرنا. توصيل سريع وضمان ذهبي. لا يفوتك العرض الفخم وضغطتين على الشاشة واطلبه! 🚀"
         st.info(generated_caption)
-        poster_url = "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600" if "سماعات" in product_type or "صوتية" in product_type else "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=600&q=80"
-        st.image(poster_url, caption="محاكاة معالجة خلفية الصورة بالذكاء الاصطناعي", use_container_width=True)
+        
+        # التعديل هنا أيضاً لعرض الصورة المرفوعة يدوياً، وإلا يعرض صورة افتراضية ذكية
+        if uploaded_file:
+            st.image(uploaded_file, caption="معاينة منتجك المرفوع", use_container_width=True)
+        else:
+            poster_url = "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600" if "سماعات" in product_type or "صوتية" in product_type else "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=600&q=80"
+            st.image(poster_url, caption="صورة توضيحية افتراضية للمعاينة", use_container_width=True)
+            
         if st.button("🚀 بث ونشر الحملة يدوياً الآن في كل القنوات"):
             with st.spinner("جاري صياغة البوستر وإرسال الـ Webhooks..."):
                 time.sleep(1)
@@ -307,13 +314,13 @@ with tab_review:
 with tab_seo:
     st.markdown("<h3 style='color:#38BDF8;'>🔍 معالج ومحسن السيو (SEO) لرفع تصنيف المتاجر في قوقل</h3>", unsafe_allow_html=True)
     st.markdown('<div class="service-card">', unsafe_allow_html=True)
-    prod_keyword = st.text_input("الكلمة المفتاحية المستهدفة:", "عطر فرنسي فخم")
+    prod_keyword = st.text_input("الكلمة المفتاحية المستهدفة:", "إكسسوارات جوال فخمة")
     if st.button("توليد الكلمات الدلالية وتهيئة أكواد الميتا تاقز 🚀"):
         st.markdown(f"""
         <div class="result-box">
             <h4>🎯 بيانات الـ SEO والوصف الجاذب للمشترين:</h4>
-            <p><b>• العنوان المحسن صفحة المنتج:</b> أفضل {prod_keyword} ثابث وفوّاح لعام 2026</p>
-            <p><b>• الوصف الميتا الذكي:</b> اكتشف أرقى {prod_keyword} مصمم بتركيبة عطرية ساحرة تمنحك الثقة والفوحان العالي طوال اليوم.</p>
+            <p><b>• العنوان المحسن صفحة المنتج:</b> أفضل {prod_keyword} لعام 2026</p>
+            <p><b>• الوصف الميتا الذكي:</b> اكتشف تشكيلة من أرقى {prod_keyword} المصممة بحماية عالية تمنح جوالك الفخامة والأمان طوال اليوم.</p>
         </div>
         """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
@@ -322,7 +329,7 @@ with tab_seo:
 with tab_video:
     st.markdown("<h3 style='color:#38BDF8;'>🎬 صانع سكريبتات وسيناريوهات الفيديوهات الفيرال والتسويقية القصيرة</h3>", unsafe_allow_html=True)
     st.markdown('<div class="service-card">', unsafe_allow_html=True)
-    video_prod_input = st.text_input("ما هو المنتج المستهدف للتصوير الإعلاني؟", "نظارات شمسية ذكية")
+    video_prod_input = st.text_input("ما هو المنتج المستهدف للتصوير الإعلاني؟", "كفر جوال ذكي")
     if st.button("توليد وتخطيط سكريبت الفيديو الاحترافي التفاعلي 🎬"):
         st.markdown(f"""
         <div class="result-box" style="border-right-color: #818CF8;">
