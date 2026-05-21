@@ -11,18 +11,21 @@ st.set_page_config(
     layout="wide"
 )
 
-# تثبيت مفتاح الـ API الخاص بك مباشرة لمنع اختفائه عند تحديث الصفحة
-GOOGLE_API_KEY = "AIzaSyAiCDyI-kshdanIJMzDZ3uhTffSANHE7ZA"
-
-if GOOGLE_API_KEY:
+# جلب المفتاح بأمان من إعدادات السيرفر السرية (Secrets) لمنع حظره أو اختفائه
+if "GEMINI_API_KEY" in st.secrets:
+    GOOGLE_API_KEY = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=GOOGLE_API_KEY)
+else:
+    GOOGLE_API_KEY = None
 
 # القائمة الجانبية لمراقبة أداء المنصة وقنوات البث الحية
 with st.sidebar:
     st.markdown("<h3 style='color:#38BDF8; text-align:center;'>⚙️ بوابات الربط الحقيقي</h3>", unsafe_allow_html=True)
     
     if GOOGLE_API_KEY:
-        st.markdown("<p style='color:#34D399; margin:0; font-size:14px; text-align:center;'>🟢 محرك الذكاء الاصطناعي متصل تلقائياً وجاهز</p>", unsafe_allow_html=True)
+        st.markdown("<p style='color:#34D399; margin:0; font-size:14px; text-align:center;'>🟢 محرك الذكاء الاصطناعي متصل بأمان وجاهز</p>", unsafe_allow_html=True)
+    else:
+        st.markdown("<p style='color:#EF4444; margin:0; font-size:14px; text-align:center;'>❌ يرجى إضافة المفتاح في إعدادات Secrets</p>", unsafe_allow_html=True)
         
     st.write("---")
     st.markdown("<h4 style='color:#818CF8; text-align:center;'>📊 أداء المنصة الإجمالي اليوم</h4>", unsafe_allow_html=True)
@@ -113,38 +116,38 @@ with tab_autopilot:
             st.success(f"📦 تم استلام وتأمين ({len(bulk_files)}) صورة منتج حقيقية داخل قاعدة بيانات رِكاز!")
             
             if start_autopilot:
-                # حلقة تكرارية برمجية لمعالجة كل الصور المرفوعة واحدة تلو الأخرى تلقائياً
-                for index, file in enumerate(bulk_files):
-                    with st.spinner(f"🤖 جاري قيام الماركتير الآلي بقراءة الصورة رقم ({index + 1}) وصياغة النص البيعي..."):
-                        try:
-                            img = Image.open(file)
-                            
-                            model = genai.GenerativeModel('gemini-2.5-flash')
-                            
-                            prompt = "أنت خبير تسويق إلكتروني محترف في السوق الخليجي. انظر إلى صورة هذا المنتج المرفق وتعرف عليه بدقة واكتب نصاً تسويقياً خليجياً بليغاً ومغرياً جداً للشراء المباشر مع توفير هاشتاقات فخمة ومثيرة."
-                            
-                            response = model.generate_content([prompt, img])
-                            generated_text = response.text
-                            
-                            st.markdown(f"""
-                            <div style="background:#065F46; padding:15px; border-radius:10px; text-align:center; margin-bottom:15px;">
-                                <h5 style="color:#A7F3D0; margin:0;">🤖 تم بنجاح معالجة ونشر الصورة رقم ({index + 1})!</h5>
-                            </div>
-                            """, unsafe_allow_html=True)
-                            
-                            st.image(file, caption=f"معاينة المنتج رقم ({index + 1}) المنشور حياً", width=220)
-                            st.markdown(f"📝 **النص الإعلاني المولد للمنتج رقم ({index + 1}):**")
-                            st.info(generated_text)
-                            
+                if not GOOGLE_API_KEY:
+                    st.error("❌ خطأ: لم يتم العثور على مفتاح الـ API. يرجى إضافته في إعدادات Streamlit Dashboard Secrets.")
+                else:
+                    for index, file in enumerate(bulk_files):
+                        with st.spinner(f"🤖 جاري قيام الماركتير الآلي بقراءة الصورة رقم ({index + 1}) وصياغة النص البيعي..."):
                             try:
-                                payload = {"content": generated_text, "status": "active_broadcast"}
-                                requests.post(webhook_url, json=payload, timeout=5)
-                            except:
-                                pass
+                                img = Image.open(file)
+                                model = genai.GenerativeModel('gemini-2.5-flash')
+                                prompt = "أنت خبير تسويق إلكتروني محترف في السوق الخليجي. انظر إلى صورة هذا المنتج المرفق وتعرف عليه بدقة واكتب نصاً تسويقياً خليجياً بليغاً ومغرياً جداً للشراء المباشر مع توفير هاشتاقات فخمة ومثيرة."
                                 
-                        except Exception as e:
-                            st.error(f"حدث خلل أثناء معالجة الصورة رقم ({index + 1}): {str(e)}")
-                st.balloons()
+                                response = model.generate_content([prompt, img])
+                                generated_text = response.text
+                                
+                                st.markdown(f"""
+                                <div style="background:#065F46; padding:15px; border-radius:10px; text-align:center; margin-bottom:15px;">
+                                    <h5 style="color:#A7F3D0; margin:0;">🤖 تم بنجاح معالجة ونشر الصورة رقم ({index + 1})!</h5>
+                                </div>
+                                """, unsafe_allow_html=True)
+                                
+                                st.image(file, caption=f"معاينة المنتج رقم ({index + 1}) المنشور حياً", width=220)
+                                st.markdown(f"📝 **النص الإعلاني المولد للمنتج رقم ({index + 1}):**")
+                                st.info(generated_text)
+                                
+                                try:
+                                    payload = {"content": generated_text, "status": "active_broadcast"}
+                                    requests.post(webhook_url, json=payload, timeout=5)
+                                except:
+                                    pass
+                                    
+                            except Exception as e:
+                                st.error(f"حدث خلل أثناء معالجة الصورة رقم ({index + 1}): {str(e)}")
+                    st.balloons()
         else:
             st.info("ℹ️ يرجى رفع صور إكسسوارات الجوال الخاصة بمتجرك في المستودع باليمين لرؤية الأتمتة الحقيقية للمنصة.")
         st.markdown('</div>', unsafe_allow_html=True)
