@@ -119,8 +119,8 @@ with tab_autopilot:
                         try:
                             img = Image.open(bulk_files[0])
                             
-                            # الحل النهائي والمباشر المتوافق مع إصدار المكتبة الحالية:
-                            model = genai.GenerativeModel('gemini-1.5-flash')
+                            # التحديث الفوري لتجاوز الكاش وإجبار السيرفر على التحديث الفعلي:
+                            model = genai.GenerativeModel('gemini-2.5-flash')
                             
                             prompt = "أنت خبير تسويق إلكتروني محترف في السوق الخليجي. انظر إلى صورة هذا المنتج المرفق وتعرف عليه بدقة واكتب نصاً تسويقياً خليجياً بليغاً ومغرياً جداً للشراء المباشر مع توفير هاشتاقات فخمة ومثيرة."
                             
@@ -170,7 +170,7 @@ with tab_marketing:
         else: generated_caption = f"✨ ارتقِ بأسلوب حياتك اليومي مع {prod_title}. هندسة متقنة وتصميم ساحر يلبي طموحاتك. متوفر الآن بخصم خاص لفترة محدودة، اضغط على الرابط واكتشف الفرق الأصيل."
         st.info(generated_caption)
         if uploaded_file: st.image(uploaded_file, caption="معاينة منتجك المرفوع يدوياً", width=250)
-        if st.button("🚀 بث ونشر الحملة يدوياً الآن في كل القنوات", key="manual_pub_btn"): st.success("🟢 تم البث اليدوي بنجاح عبر بوابة النشر الفورية!")
+        if st.button("🚀 بث ونشر الحملة يدوياً الآن in كل القنوات", key="manual_pub_btn"): st.success("🟢 تم البث اليدوي بنجاح عبر بوابة النشر الفورية!")
         st.markdown('</div>', unsafe_allow_html=True)
 
 with tab_calendar:
